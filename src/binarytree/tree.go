@@ -3,6 +3,7 @@ package binarytree
 import (
 	"fmt"
 	"sort"
+	ll "jy.org/csgo/src/linkedlist"
 )
 
 type Node struct {
@@ -99,5 +100,31 @@ func contains(s []*Node, t *Node) bool {
         }
     }
     return false
+}
+
+func (n *Node) ToDoublyLinkedList() ll.DoublyLinkedList {
+    dll := n.toDllRecurse()
+    head := dll.Head()
+    return *head
+}
+
+func (n *Node) toDllRecurse() *ll.DoublyLinkedList {
+    if n == nil {
+        return nil
+    }
+
+    dll := ll.NewDoublyLinkedList(n.Data)
+
+    lseg := n.Left.toDllRecurse()
+    if lseg != nil {
+        dll.Head().PrependAll(lseg)
+    }
+
+    rseg := n.Right.toDllRecurse()
+    if rseg != nil {
+        dll.Tail().AppendAll(rseg)
+    }
+
+    return dll
 }
 

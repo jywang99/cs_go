@@ -8,7 +8,6 @@ import (
 )
 
 func TestDepth(t *testing.T) {
-    t.Log("Starting TestDepth")
     head := bt.NewNode(1)
 
     two := bt.NewNode(2)
@@ -22,8 +21,6 @@ func TestDepth(t *testing.T) {
 }
 
 func TestVerticalTraverse(t *testing.T) {
-    t.Log("Starting TestVerticalTraverse")
-
     head := bt.NewNode(1)
 
     two := bt.NewNode(2)
@@ -54,8 +51,6 @@ func TestVerticalTraverse(t *testing.T) {
 }
 
 func TestFindLCA(t *testing.T) {
-    t.Log("Starting TestFindLCA")
-
     head := bt.NewNode(1)
 
     two := bt.NewNode(2)
@@ -73,3 +68,32 @@ func TestFindLCA(t *testing.T) {
     assert.Equal(t, 1, head.FindLCA(5,6))
 }
 
+func TestToDoublyLinkedList(t *testing.T) {
+    ten := bt.NewNode(10)
+
+    twelve := bt.NewNode(12)
+    fifteen := bt.NewNode(15)
+    ten.Left = twelve
+    ten.Right = fifteen
+
+    twelve.Left = bt.NewNode(25)
+    twelve.Right = bt.NewNode(30)
+
+    fifteen.Left = bt.NewNode(36)
+
+    dll := ten.ToDoublyLinkedList()
+    n := &dll
+    n.Print()
+
+    assert.Equal(t, 25, n.Data)
+    n = n.Next
+    assert.Equal(t, 12, n.Data)
+    n = n.Next
+    assert.Equal(t, 30, n.Data)
+    n = n.Next
+    assert.Equal(t, 10, n.Data)
+    n = n.Next
+    assert.Equal(t, 36, n.Data)
+    n = n.Next
+    assert.Equal(t, 15, n.Data)
+}
