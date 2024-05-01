@@ -11,6 +11,7 @@ func TestBubbleSort(t *testing.T) {
     sorters := []s.Sorter{ 
         &s.BubbleSorter{},
         &s.SelectionSorter{},
+        &s.InsertionSorter{},
     }
 
     for _, sorter := range(sorters) {
