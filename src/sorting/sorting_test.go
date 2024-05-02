@@ -8,10 +8,12 @@ import (
 )
 
 func TestBubbleSort(t *testing.T) {
-    sorters := []s.Sorter{ 
+    sorters := []s.Sorter{
         &s.BubbleSorter{},
-        &s.SelectionSorter{},
         &s.InsertionSorter{},
+        &s.SelectionSorter{},
+        &s.HeapSorter{},
+        &s.QuickSorter{},
     }
 
     for _, sorter := range(sorters) {
