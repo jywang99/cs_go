@@ -14,6 +14,7 @@ func TestBubbleSort(t *testing.T) {
         &s.SelectionSorter{},
         &s.HeapSorter{},
         &s.QuickSorter{},
+        &s.MergeSorter{},
     }
 
     for _, sorter := range(sorters) {
