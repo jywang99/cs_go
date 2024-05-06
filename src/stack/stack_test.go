@@ -18,10 +18,13 @@ func TestStack(t *testing.T) {
     assert.Equal(t, 3, v)
     v = s.Pop()
     assert.Equal(t, 2, v)
+    assert.False(t, s.IsEmpty())
     v = s.Pop()
     assert.Equal(t, 1, v)
 
     v = s.Pop()
     assert.Equal(t, nil, v)
+
+    assert.True(t, s.IsEmpty())
 }
 

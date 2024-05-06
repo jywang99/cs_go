@@ -1,8 +1,8 @@
 package binarytree
 
 import (
-	"fmt"
 	"sort"
+
 	ll "jy.org/csgo/src/linkedlist"
 )
 
@@ -20,13 +20,6 @@ func NewNode(data int) *Node {
     }
 }
 
-func (node *Node) GetDepth() int {
-    if node == nil {
-        return 0
-    }
-    return 1 + max(node.Left.GetDepth(), node.Right.GetDepth())
-}
-
 func (node *Node) TraverseVertical() map[int][]int {
     lvlMap := make(map[int][]int)
     node.traverseVertRecurse(0, &lvlMap)
@@ -36,10 +29,6 @@ func (node *Node) TraverseVertical() map[int][]int {
         keys = append(keys, key)
     }
     sort.Ints(keys)
-
-    for _, key := range keys {
-        fmt.Printf("%v\n", lvlMap[key])
-    }
 
     return lvlMap
 }

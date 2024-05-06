@@ -83,7 +83,7 @@ func TestToDoublyLinkedList(t *testing.T) {
 
     dll := ten.ToDoublyLinkedList()
     n := &dll
-    n.Print()
+    // n.Print()
 
     assert.Equal(t, 25, n.Data)
     n = n.Next
@@ -96,4 +96,56 @@ func TestToDoublyLinkedList(t *testing.T) {
     assert.Equal(t, 36, n.Data)
     n = n.Next
     assert.Equal(t, 15, n.Data)
+}
+
+func TestFullAndCompleteTree(t *testing.T) {
+    head := bt.NewNode(1)
+
+    b := bt.NewNode(2)
+    c := bt.NewNode(3)
+    head.Left = b
+    head.Right = c
+
+    d := bt.NewNode(4)
+    e := bt.NewNode(5)
+    f := bt.NewNode(6)
+    b.Left = d
+    b.Right = e
+    c.Left = f
+
+    assert.False(t, head.IsFull())
+    assert.True(t, head.IsComplete())
+
+    g := bt.NewNode(7)
+    c.Right = g
+
+    assert.True(t, head.IsFull())
+    assert.True(t, head.IsComplete())
+
+    h := bt.NewNode(8)
+    g.Right = h
+
+    assert.False(t, head.IsFull())
+    assert.False(t, head.IsComplete())
+}
+
+func TestBalanced(t *testing.T) {
+    head := bt.NewNode(0)
+
+    one := bt.NewNode(1)
+    two := bt.NewNode(2)
+    head.Left = one
+    head.Right = two
+
+    three := bt.NewNode(3)
+    four := bt.NewNode(4)
+    one.Left = three
+    one.Right = four
+
+    assert.True(t, head.IsBalanced())
+
+    five := bt.NewNode(5)
+    three.Left = five
+
+    assert.False(t, head.IsBalanced())
 }

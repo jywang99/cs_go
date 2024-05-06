@@ -16,3 +16,16 @@ func (s *Stack) Pop() any {
     return a
 }
 
+func (s *Stack) IsEmpty() bool {
+    return len(*s) == 0
+}
+
+func (s *Stack) Contains(d any) bool {
+    for _, v := range *s {
+        if v == d {
+            return true
+        }
+    }
+    return false
+}
+
