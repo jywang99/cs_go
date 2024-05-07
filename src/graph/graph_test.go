@@ -74,5 +74,22 @@ func TestDfs(t *testing.T) {
         {0, 1, 2, 3, 4},
     }
 
-    assert.Contains(t, exps, g.DFS(0))
+    dfsRs := g.DFS(0)
+    assert.Contains(t, exps, dfsRs)
+    dfsRs = g.DFSRecurse(0)
+    assert.Contains(t, exps, dfsRs)
+}
+
+func TestCreateWeightedGraph(t *testing.T) {
+    g := gh.NewDWGraph(6)
+    g.PrintAdjMtx()
+
+    g.AddEdge(0, 1, 5)
+    g.AddEdge(1, 2, 1)
+    g.AddEdge(1, 3, 2)
+    g.AddEdge(2, 4, 1)
+    g.AddEdge(4, 3, -1)
+    g.AddEdge(3, 5, 2)
+    g.AddEdge(5, 4, -3)
+    g.PrintAdjMtx()
 }

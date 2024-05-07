@@ -65,15 +65,22 @@ func (g *UGraph) DFS(s int) []int {
     return rs
 }
 
-// func (g *UGraph) DFSRecurse(s int) []int {
-//     visited := make([]bool, g.vtcs)
-//     rs := make([]int, g.vtcs)
-//
-//     g.dfsRecurse()
-//
-//     return rs
-// }
-//
-// func (g *UGraph) dfsRecurse(f int, visited *[]bool, rs *[]int, ri *int) {
-//
-// }
+func (g *UGraph) DFSRecurse(s int) []int {
+    visited := make([]bool, g.vtcs)
+    rs := make([]int, g.vtcs)
+    ri := 0
+    g.dfsRecurse(s, &visited, &rs, &ri)
+    return rs
+}
+
+func (g *UGraph) dfsRecurse(f int, visited *[]bool, rs *[]int, ri *int) {
+    (*visited)[f] = true
+    (*rs)[*ri] = f
+    (*ri) ++
+
+    for _, i := range g.getNeighbors(f) {
+        if !(*visited)[i] {
+            g.dfsRecurse(i, visited, rs, ri)
+        }
+    }
+}
