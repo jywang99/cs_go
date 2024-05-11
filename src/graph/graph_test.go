@@ -81,7 +81,7 @@ func TestDfs(t *testing.T) {
 }
 
 func TestCreateWeightedGraph(t *testing.T) {
-    g := gh.NewDWGraph(6)
+    g := gh.NewWGraph(6, true)
 
     g.AddEdge(0, 1, 5)
     g.AddEdge(1, 2, 1)
@@ -94,7 +94,7 @@ func TestCreateWeightedGraph(t *testing.T) {
 }
 
 func TestBellmanFord(t *testing.T) {
-    g := gh.NewDWGraph(6)
+    g := gh.NewWGraph(6, true)
 
     g.AddEdge(0, 1, 10)
     g.AddEdge(0, 5, 8)
@@ -113,3 +113,35 @@ func TestBellmanFord(t *testing.T) {
     ds, err = g.BellmanFord(0)
     assert.NotNil(t, err)
 }
+
+func TestDijkstra(t *testing.T) {
+    g := gh.NewWGraph(5, false)
+    g.AddEdge(0, 1, 6)
+    g.AddEdge(0, 3, 1)
+    g.AddEdge(1, 3, 2)
+    g.AddEdge(1, 4, 2)
+    g.AddEdge(1, 2, 5)
+    g.AddEdge(2, 4, 5)
+    g.AddEdge(4, 3, 1)
+
+    ds, err := g.Dijkstra(0)
+    assert.Nil(t, err)
+
+    d := *ds[0]
+    assert.Equal(t, 0, d.Dist)
+    var nili *int
+    assert.Equal(t, nili, d.Prev)
+    d = *ds[1]
+    assert.Equal(t, 3, d.Dist)
+    assert.Equal(t, 3, *d.Prev)
+    d = *ds[2]
+    assert.Equal(t, 7, d.Dist)
+    assert.Equal(t, 4, *d.Prev)
+    d = *ds[3]
+    assert.Equal(t, 1, d.Dist)
+    assert.Equal(t, 0, *d.Prev)
+    d = *ds[4]
+    assert.Equal(t, 2, d.Dist)
+    assert.Equal(t, 3, *d.Prev)
+}
+

@@ -1,13 +1,16 @@
 package graph
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
-func (g *DWGraph) BellmanFord(s int) ([]int, error) {
+func (g *WGraph) BellmanFord(s int) ([]int, error) {
     ds := make([]*int, g.size)
     d := 0
     ds[s] = &d
 
-    // repeat n-1 times
+    // relax n-1 times
     for i:=0; i<g.size-1; i++ {
         g.bfRelax(&ds)
     }
@@ -27,11 +30,11 @@ func (g *DWGraph) BellmanFord(s int) ([]int, error) {
     return rs, nil
 }
 
-func (g *DWGraph) bfRelax(dsp *[]*int) {
+func (g *WGraph) bfRelax(dsp *[]*int) {
     ds := *dsp
     // for each vertex
     for v:=0; v<g.size; v++ {
-        // distance to this vertex not calculated yet
+        // distance to this vertex not calculated yet, skip
         if ds[v] == nil {
             continue
         }
@@ -49,5 +52,83 @@ func (g *DWGraph) bfRelax(dsp *[]*int) {
             }
         }
     }
+}
+
+type DijResult struct {
+    Dist int
+    Prev *int
+}
+
+func (g *WGraph) Dijkstra(s int) ([]*DijResult, error) {
+    // make sure there's no negative edge
+    for _, r := range g.adjMtx {
+        for c, w := range r {
+            if w != nil && *w < 0 {
+                return nil, errors.New(fmt.Sprintf("Negative edge found! src=%v, dst=%v, w=%v", r, c, *w))
+            }
+        }
+    }
+
+    // visited vertices
+    visited := make([]bool, g.size)
+    // shortest distance found
+    ds := make([]*DijResult, g.size)
+    // initialize starting vertex
+    ds[s] = &DijResult{ Dist: 0 }
+
+    allVisited := func() bool {
+        for _, v := range visited {
+            if !v {
+                return false
+            }
+        }
+        return true
+    }
+
+    getClosestUnvisitedV := func() (int, error) {
+        var cv *int
+        var md *int
+        for i, d := range ds {
+            // already visited or distance unknown
+            if visited[i] || d == nil {
+                continue
+            }
+            if md == nil || (*d).Dist < *md {
+                ci := i
+                cv = &ci
+                md = &(*d).Dist
+            }
+        }
+
+        if cv == nil {
+            return -1, errors.New("Could not find closest unvisited vertex!")
+        }
+
+        return *cv, nil
+    }
+
+    // repeat until all vertices are visited
+    for ; !allVisited(); {
+        // pick the vertex with shortest known distance
+        v, err := getClosestUnvisitedV()
+        if err != nil {
+            return nil, err
+        }
+
+        visited[v] = true
+        // update distances for its unvisited neighbors
+        for vt, w := range g.adjMtx[v] {
+            // not neighbor
+            if w == nil {
+                continue
+            }
+            nd := (*ds[v]).Dist + *w
+            if ds[vt] == nil || nd < (*ds[vt]).Dist {
+                ds[vt] = &DijResult{nd, &v}
+            }
+        }
+    }
+
+    return ds, nil
 }
 
