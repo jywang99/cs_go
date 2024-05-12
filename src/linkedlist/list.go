@@ -23,6 +23,13 @@ func (src *SinglyLinkedList) Append(d any) *SinglyLinkedList {
     return n
 }
 
+func (n *SinglyLinkedList) Tail() *SinglyLinkedList {
+    if n.Next == nil {
+        return n
+    }
+    return n.Next.Tail()
+}
+
 type DoublyLinkedList struct {
     Data any
     Prev *DoublyLinkedList

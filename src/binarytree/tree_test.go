@@ -149,3 +149,25 @@ func TestBalanced(t *testing.T) {
 
     assert.False(t, head.IsBalanced())
 }
+
+func TestTraversals(t *testing.T) {
+    one := bt.NewNode(1)
+    two := bt.NewNode(2)
+    three := bt.NewNode(3)
+    four := bt.NewNode(4)
+    five := bt.NewNode(5)
+    six := bt.NewNode(6)
+    seven := bt.NewNode(7)
+
+    one.Left = two
+    one.Right = three
+    two.Left = four
+    two.Right = five
+    three.Left = six
+    three.Right = seven
+
+    assert.Equal(t, []int{4,2,5,1,6,3,7}, one.TraverseInOrder())
+    assert.Equal(t, []int{1,2,4,5,3,6,7}, one.TraversePreOrder())
+    assert.Equal(t, []int{4,5,2,6,7,3,1}, one.TraversePostOrder())
+    assert.Equal(t, []int{1,2,3,4,5,6,7}, one.TraverseLevelOrder())
+}
