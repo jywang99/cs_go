@@ -1,14 +1,18 @@
 package binarysearchtree
 
-import "fmt"
+import (
+	"fmt"
+
+	ct "jy.org/csgo/src/custtypes"
+)
 
 type Node struct {
-    Data int
+    Data ct.Comparable
     Left *Node
     Right *Node
 }
 
-func NewNode(data int) *Node {
+func NewNode(data ct.Comparable) *Node {
     return &Node{
         data,
         nil,
@@ -31,7 +35,7 @@ func printRecurse(nodes []*Node) {
         newNodes = append(newNodes, n.Left)
         newNodes = append(newNodes, n.Right)
         any = true
-        fmt.Printf("%d ", n.Data)
+        fmt.Printf("%s ", n.Data.ToString())
     }
 
     if !any {
@@ -42,8 +46,8 @@ func printRecurse(nodes []*Node) {
     printRecurse(newNodes)
 }
 
-func (node *Node) Insert(data int) {
-    if data <= node.Data {
+func (node *Node) Insert(data ct.Comparable) {
+    if data.CompareTo(&node.Data) < 0 {
         nextNode := node.Left
         if nextNode == nil {
             node.Left = NewNode(data)
@@ -60,7 +64,7 @@ func (node *Node) Insert(data int) {
     }
 }
 
-func SortedArrToBalancedBST(arr []int) *Node {
+func SortedArrToBalancedBST(arr []ct.Comparable) *Node {
     if len(arr) == 0 {
         return nil
     }

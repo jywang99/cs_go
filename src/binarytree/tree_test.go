@@ -39,13 +39,13 @@ func TestVerticalTraverse(t *testing.T) {
 
     vmap := head.TraverseVertical()
     
-    exp := make(map[int][]int)
-    exp[-2] = []int{4}
-    exp[-1] = []int{2}
-    exp[0] = []int{1,5,6}
-    exp[1] = []int{3,8}
-    exp[2] = []int{7}
-    exp[3] = []int{9}
+    exp := make(map[int][]any)
+    exp[-2] = []any{4}
+    exp[-1] = []any{2}
+    exp[0] = []any{1,5,6}
+    exp[1] = []any{3,8}
+    exp[2] = []any{7}
+    exp[3] = []any{9}
 
     assert.Equal(t, exp, vmap)
 }
@@ -166,8 +166,8 @@ func TestTraversals(t *testing.T) {
     three.Left = six
     three.Right = seven
 
-    assert.Equal(t, []int{4,2,5,1,6,3,7}, one.TraverseInOrder())
-    assert.Equal(t, []int{1,2,4,5,3,6,7}, one.TraversePreOrder())
-    assert.Equal(t, []int{4,5,2,6,7,3,1}, one.TraversePostOrder())
-    assert.Equal(t, []int{1,2,3,4,5,6,7}, one.TraverseLevelOrder())
+    assert.Equal(t, []any{4,2,5,1,6,3,7}, one.TraverseInOrder())
+    assert.Equal(t, []any{1,2,4,5,3,6,7}, one.TraversePreOrder())
+    assert.Equal(t, []any{4,5,2,6,7,3,1}, one.TraversePostOrder())
+    assert.Equal(t, []any{1,2,3,4,5,6,7}, one.TraverseLevelOrder())
 }

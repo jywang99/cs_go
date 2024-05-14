@@ -7,7 +7,7 @@ import (
 )
 
 type Node struct {
-    Data int
+    Data any
     Left *Node
     Right *Node
 }
@@ -20,8 +20,8 @@ func NewNode(data int) *Node {
     }
 }
 
-func (node *Node) TraverseVertical() map[int][]int {
-    lvlMap := make(map[int][]int)
+func (node *Node) TraverseVertical() map[int][]any {
+    lvlMap := make(map[int][]any)
     node.traverseVertRecurse(0, &lvlMap)
 
     keys := make([]int, 0, len(lvlMap))
@@ -33,13 +33,13 @@ func (node *Node) TraverseVertical() map[int][]int {
     return lvlMap
 }
 
-func (node *Node) traverseVertRecurse(curLvl int, lvlMap *map[int][]int) {
+func (node *Node) traverseVertRecurse(curLvl int, lvlMap *map[int][]any) {
     if node == nil {
         return
     }
 
     if _, ok := (*lvlMap)[curLvl]; !ok {
-        (*lvlMap)[curLvl] = []int{node.Data}
+        (*lvlMap)[curLvl] = []any{node.Data}
     } else {
         (*lvlMap)[curLvl] = append((*lvlMap)[curLvl], node.Data)
     }
@@ -48,7 +48,7 @@ func (node *Node) traverseVertRecurse(curLvl int, lvlMap *map[int][]int) {
     node.Right.traverseVertRecurse(curLvl+1, lvlMap)
 }
 
-func (root *Node) FindLCA(d1 int, d2 int) int {
+func (root *Node) FindLCA(d1 int, d2 int) any {
     path1 := root.findPath(d1, []*Node{})
     path2 := root.findPath(d2, []*Node{})
 

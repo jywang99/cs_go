@@ -2,13 +2,13 @@ package binarytree
 
 import ll "jy.org/csgo/src/linkedlist"
 
-func (n *Node) TraversePreOrder() []int {
-    rs := make([]int, 0)
+func (n *Node) TraversePreOrder() []any {
+    rs := make([]any, 0)
     n.preOrderRec(&rs)
     return rs
 }
 
-func (n *Node) preOrderRec(rs *[]int) {
+func (n *Node) preOrderRec(rs *[]any) {
     if n == nil {
         return
     }
@@ -17,13 +17,13 @@ func (n *Node) preOrderRec(rs *[]int) {
     n.Right.preOrderRec(rs)
 }
 
-func (n *Node) TraverseInOrder() []int {
-    rs := make([]int, 0)
+func (n *Node) TraverseInOrder() []any {
+    rs := make([]any, 0)
     n.inOrderRec(&rs)
     return rs
 }
 
-func (n *Node) inOrderRec(rs *[]int) {
+func (n *Node) inOrderRec(rs *[]any) {
     if n == nil {
         return
     }
@@ -32,13 +32,13 @@ func (n *Node) inOrderRec(rs *[]int) {
     n.Right.inOrderRec(rs)
 }
 
-func (n *Node) TraversePostOrder() []int {
-    rs := make([]int, 0)
+func (n *Node) TraversePostOrder() []any {
+    rs := make([]any, 0)
     n.postOrderRec(&rs)
     return rs
 }
 
-func (n *Node) postOrderRec(rs *[]int) {
+func (n *Node) postOrderRec(rs *[]any) {
     if n == nil {
         return
     }
@@ -47,8 +47,8 @@ func (n *Node) postOrderRec(rs *[]int) {
     *rs = append(*rs, n.Data)
 }
 
-func (n *Node) TraverseLevelOrder() []int {
-    rs := make([]int, 0)
+func (n *Node) TraverseLevelOrder() []any {
+    rs := make([]any, 0)
     nn := ll.NewSinglyLinkedList(n)
     nt := nn
 
