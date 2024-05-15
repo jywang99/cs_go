@@ -2,17 +2,19 @@ package heap
 
 import (
 	"errors"
+
+	ct "jy.org/csgo/src/custtypes"
 )
 
 type minHeap struct {
-    arr []*int
+    arr []*ct.Comparable
     size int
     cap int
 }
 
 func NewMinHeap(cap int) *minHeap {
     return &minHeap{
-        arr: make([]*int, cap),
+        arr: make([]*ct.Comparable, cap),
         size: 0,
         cap: cap,
     }
@@ -46,14 +48,14 @@ func (h *minHeap) heapify() {
 }
 
 func (h *minHeap) heapifyRecurse(i int) {
-    li, lvalid := h.leftIdx(i)
-    ri, rvalid := h.rightIdx(i)
+    li, le := h.leftIdx(i)
+    ri, re := h.rightIdx(i)
 
     mi := i
-    if lvalid && *h.arr[li] < *h.arr[mi] {
+    if le && (*h.arr[li]).CompareTo(*h.arr[mi]) < 0 {
         mi = li
     }
-    if rvalid && *h.arr[ri] < *h.arr[mi] {
+    if re && (*h.arr[ri]).CompareTo(*h.arr[mi]) < 0 {
         mi = ri
     }
 
@@ -63,11 +65,11 @@ func (h *minHeap) heapifyRecurse(i int) {
     }
 }
 
-func (h *minHeap) GetMin() *int {
+func (h *minHeap) GetMin() *ct.Comparable {
     return h.arr[0]
 }
 
-func (h *minHeap) ExtractMin() *int {
+func (h *minHeap) ExtractMin() *ct.Comparable {
     if h.size <= 0 {
         return nil
     }
@@ -85,7 +87,7 @@ func (h *minHeap) ExtractMin() *int {
     return r
 }
 
-func (h *minHeap) Insert(d int) error {
+func (h *minHeap) Insert(d ct.Comparable) error {
     if h.size >= h.cap {
         return errors.New("Heap is already full!")
     }
@@ -99,7 +101,7 @@ func (h *minHeap) Insert(d int) error {
 func (h *minHeap) swim(i int) {
     for ; i != 0; {
         pi, pvalid := h.parentIdx(i)
-        if pvalid && *h.arr[i] >= *h.arr[pi] {
+        if pvalid && (*h.arr[i]).CompareTo(*h.arr[pi]) >= 0 {
             break
         }
         h.swap(i, pi)

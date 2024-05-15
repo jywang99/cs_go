@@ -1,18 +1,20 @@
 package sorting
 
+import ct "jy.org/csgo/src/custtypes"
+
 type MergeSorter struct{}
 
 func (b *MergeSorter) GetName() string {
     return "Merge Sort"
 }
 
-func (b *MergeSorter) Sort(arr *[]int) {
+func (b *MergeSorter) Sort(arr *[]ct.Comparable) {
     a := *arr
     if len(a) <= 1 {
         return
     }
     if len(a) == 2 {
-        if a[0] > a[1] {
+        if a[0].CompareTo(a[1]) > 0 {
             tmp := a[0]
             a[0] = a[1]
             a[1] = tmp
@@ -20,8 +22,8 @@ func (b *MergeSorter) Sort(arr *[]int) {
     }
 
     mi := len(a) / 2
-    larr := make([]int, mi)
-    rarr := make([]int, len(a) - mi)
+    larr := make([]ct.Comparable, mi)
+    rarr := make([]ct.Comparable, len(a) - mi)
     copy(larr, a[:mi])
     copy(rarr, a[mi:])
 
@@ -44,7 +46,7 @@ func (b *MergeSorter) Sort(arr *[]int) {
 
         rv := rarr[ri]
         lv := larr[li]
-        if rv < lv {
+        if rv.CompareTo(lv) < 0 {
             a[i] = rv
             ri ++
         } else {

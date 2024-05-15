@@ -35,7 +35,7 @@ func printRecurse(nodes []*Node) {
         newNodes = append(newNodes, n.Left)
         newNodes = append(newNodes, n.Right)
         any = true
-        fmt.Printf("%s ", n.Data.ToString())
+        fmt.Printf("%v ", n.Data)
     }
 
     if !any {
@@ -47,7 +47,7 @@ func printRecurse(nodes []*Node) {
 }
 
 func (node *Node) Insert(data ct.Comparable) {
-    if data.CompareTo(&node.Data) < 0 {
+    if data.CompareTo(node.Data) < 0 {
         nextNode := node.Left
         if nextNode == nil {
             node.Left = NewNode(data)
