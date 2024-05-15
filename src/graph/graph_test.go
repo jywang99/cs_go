@@ -1,8 +1,6 @@
 package graph_test
 
 import (
-	// "fmt"
-
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -81,7 +79,8 @@ func TestDfs(t *testing.T) {
 }
 
 func TestCreateWeightedGraph(t *testing.T) {
-    g := gh.NewWGraph(6, true)
+    g := gh.NewWGraph(6, false)
+    // g.PrintAdjMtx()
 
     g.AddEdge(0, 1, 5)
     g.AddEdge(1, 2, 1)
