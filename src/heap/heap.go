@@ -6,15 +6,15 @@ import (
 	ct "jy.org/csgo/src/custtypes"
 )
 
-type minHeap struct {
+type MinHeap struct {
     arr []any
     size int
     cap int
     cmp ct.Comparator
 }
 
-func NewMinHeap(cap int, cmp ct.Comparator) *minHeap {
-    return &minHeap{
+func NewMinHeap(cap int, cmp ct.Comparator) *MinHeap {
+    return &MinHeap{
         arr: make([]any, cap),
         size: 0,
         cap: cap,
@@ -22,36 +22,44 @@ func NewMinHeap(cap int, cmp ct.Comparator) *minHeap {
     }
 }
 
-func (h *minHeap) parentIdx(i int) (int, bool) {
+func (h *MinHeap) Size() int {
+    return h.size
+}
+
+func (h *MinHeap) parentIdx(i int) (int, bool) {
     if i <= 0 {
         return 0, false
     }
     return i/2, true
 }
 
-func (h *minHeap) leftIdx(i int) (int, bool) {
+func (h *MinHeap) LeftIdx(i int) (int, bool) {
     li := i*2 + 1
     return li, li < h.size
 }
 
-func (h *minHeap) rightIdx(i int) (int, bool) {
+func (h *MinHeap) RightIdx(i int) (int, bool) {
     ri := i*2 + 2
     return ri, ri < h.size
 }
 
-func (h *minHeap) swap(i, j int) {
+func (h *MinHeap) GetValue(i int) any {
+    return h.arr[i]
+}
+
+func (h *MinHeap) swap(i, j int) {
     tmp := h.arr[i]
     h.arr[i] = h.arr[j]
     h.arr[j] = tmp
 }
 
-func (h *minHeap) heapify() {
+func (h *MinHeap) heapify() {
     h.heapifyRecurse(0)
 }
 
-func (h *minHeap) heapifyRecurse(i int) {
-    li, le := h.leftIdx(i)
-    ri, re := h.rightIdx(i)
+func (h *MinHeap) heapifyRecurse(i int) {
+    li, le := h.LeftIdx(i)
+    ri, re := h.RightIdx(i)
 
     mi := i
     if le && h.cmp(h.arr[li], h.arr[mi]) < 0 {
@@ -67,11 +75,11 @@ func (h *minHeap) heapifyRecurse(i int) {
     }
 }
 
-func (h *minHeap) GetMin() any {
+func (h *MinHeap) GetMin() any {
     return h.arr[0]
 }
 
-func (h *minHeap) ExtractMin() any {
+func (h *MinHeap) ExtractMin() any {
     if h.size <= 0 {
         return nil
     }
@@ -89,7 +97,7 @@ func (h *minHeap) ExtractMin() any {
     return r
 }
 
-func (h *minHeap) Insert(d any) error {
+func (h *MinHeap) Insert(d any) error {
     if h.size >= h.cap {
         return errors.New("Heap is already full!")
     }
@@ -99,7 +107,7 @@ func (h *minHeap) Insert(d any) error {
     return nil
 }
 
-func (h *minHeap) swim(i int) {
+func (h *MinHeap) swim(i int) {
     for ; i != 0; {
         pi, pvalid := h.parentIdx(i)
         if pvalid && h.cmp(h.arr[i], h.arr[pi]) >= 0 {

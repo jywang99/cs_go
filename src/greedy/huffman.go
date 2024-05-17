@@ -1,17 +1,26 @@
 package greedy
 
 import (
+	"errors"
+	"fmt"
+
 	"jy.org/csgo/src/heap"
 )
 
-type huffmanRune struct {
-    c rune
-    freq int
+type HuffmanTree struct {
+    head *huffNode
 }
 
-func cmpHuffmanRune(c, ct any) int {
-    h := c.(*huffmanRune)
-    ht := ct.(*huffmanRune)
+type huffNode struct {
+    ch *rune
+    freq int
+    left *huffNode
+    right *huffNode
+}
+
+func cmpHuffmanNode(c, ct any) int {
+    h := c.(*huffNode)
+    ht := ct.(*huffNode)
     if h.freq == ht.freq {
         return 0
     }
@@ -21,29 +30,78 @@ func cmpHuffmanRune(c, ct any) int {
     return -1
 }
 
-func HuffmanEncode(src string) (string, map[rune]string) {
+func NewHuffmanEncode(src string) (string, *HuffmanTree, error) {
     // make frequency table
     freq := make(map[rune]int)
     for _, c := range src {
         f, e := freq[c]
         if e {
-            freq[c] = 1
-        } else {
             freq[c] = f + 1
+        } else {
+            freq[c] = 1
         }
     }
 
-    // create a priority queue
-    h := heap.NewMinHeap(len(src), cmpHuffmanRune)
+    // create a min heap
+    l := len(freq)
+    h := heap.NewMinHeap(l, cmpHuffmanNode)
     for k, v := range(freq) {
-        h.Insert(&huffmanRune{c: k, freq:v})
+        kc := k
+        h.Insert(&huffNode{ch: &kc, freq:v})
     }
 
-    // get hashcode from queue
+    // create huffman tree
+    for ; h.Size()>1; {
+        ns := h.ExtractMin().(*huffNode)
+        nl := h.ExtractMin().(*huffNode)
+        np := &huffNode{
+            freq: ns.freq + nl.freq,
+            left: ns,
+            right: nl,
+        }
+        h.Insert(np)
+    }
+
+    head := h.GetMin().(*huffNode)
+    ht := HuffmanTree{head: head}
+
+    encoded, err := ht.Encode(src)
+    if err != nil {
+        return "", nil, err
+    }
+    return encoded, &ht, nil
+}
+
+func (ht *HuffmanTree) Encode(src string) (string, error) {
+    // get hashcodes from heap
     hashes := make(map[rune]string)
+    getHashcodes(ht.head, "", &hashes)
 
     // encode
     encoded := ""
+    for _, c := range src {
+        code, e := hashes[c]
+        if !e {
+            return "", errors.New(fmt.Sprintf("Character %v could not be encoded!", string(c)))
+        }
+        encoded += code
+    }
 
-    return encoded, hashes
+    return encoded, nil
 }
+
+func getHashcodes(h *huffNode, path string, cmap *map[rune]string) {
+    if h == nil {
+        return
+    }
+    if h.ch != nil {
+        (*cmap)[*h.ch] = path
+    }
+    getHashcodes(h.left, path + "0", cmap)
+    getHashcodes(h.right, path + "1", cmap)
+}
+
+func (ht *HuffmanTree) Decode(src string) string {
+    return ""
+}
+

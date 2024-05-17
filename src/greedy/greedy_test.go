@@ -15,3 +15,11 @@ func TestSuffixArray(t *testing.T) {
     assert.Equal(t, 1, sarr.FindFirstOccr("anana"))
     assert.Equal(t, -1, sarr.FindFirstOccr("asdf"))
 }
+
+func TestHuffman(t *testing.T) {
+    rs, ht, err := greedy.NewHuffmanEncode("AAAAAABBCCDDEEFFFFF")
+    assert.Nil(t, err)
+    assert.Equal(t, 46, len(rs)) // since order of traversing a map is not guaranteed, specific codes can be different
+    assert.NotNil(t, ht)
+}
+
