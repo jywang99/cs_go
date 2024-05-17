@@ -7,16 +7,18 @@ import (
 )
 
 type minHeap struct {
-    arr []*ct.Comparable
+    arr []any
     size int
     cap int
+    cmp ct.Comparator
 }
 
-func NewMinHeap(cap int) *minHeap {
+func NewMinHeap(cap int, cmp ct.Comparator) *minHeap {
     return &minHeap{
-        arr: make([]*ct.Comparable, cap),
+        arr: make([]any, cap),
         size: 0,
         cap: cap,
+        cmp: cmp,
     }
 }
 
@@ -52,10 +54,10 @@ func (h *minHeap) heapifyRecurse(i int) {
     ri, re := h.rightIdx(i)
 
     mi := i
-    if le && (*h.arr[li]).CompareTo(*h.arr[mi]) < 0 {
+    if le && h.cmp(h.arr[li], h.arr[mi]) < 0 {
         mi = li
     }
-    if re && (*h.arr[ri]).CompareTo(*h.arr[mi]) < 0 {
+    if re && h.cmp(h.arr[ri], h.arr[mi]) < 0 {
         mi = ri
     }
 
@@ -65,11 +67,11 @@ func (h *minHeap) heapifyRecurse(i int) {
     }
 }
 
-func (h *minHeap) GetMin() *ct.Comparable {
+func (h *minHeap) GetMin() any {
     return h.arr[0]
 }
 
-func (h *minHeap) ExtractMin() *ct.Comparable {
+func (h *minHeap) ExtractMin() any {
     if h.size <= 0 {
         return nil
     }
@@ -87,12 +89,11 @@ func (h *minHeap) ExtractMin() *ct.Comparable {
     return r
 }
 
-func (h *minHeap) Insert(d ct.Comparable) error {
+func (h *minHeap) Insert(d any) error {
     if h.size >= h.cap {
         return errors.New("Heap is already full!")
     }
-    dd := d
-    h.arr[h.size] = &dd
+    h.arr[h.size] = d
     h.size ++
     h.swim(h.size-1)
     return nil
@@ -101,7 +102,7 @@ func (h *minHeap) Insert(d ct.Comparable) error {
 func (h *minHeap) swim(i int) {
     for ; i != 0; {
         pi, pvalid := h.parentIdx(i)
-        if pvalid && (*h.arr[i]).CompareTo(*h.arr[pi]) >= 0 {
+        if pvalid && h.cmp(h.arr[i], h.arr[pi]) >= 0 {
             break
         }
         h.swap(i, pi)

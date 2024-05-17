@@ -7,12 +7,17 @@ import (
 )
 
 type Node struct {
-    Data ct.Comparable
+    Data any
     Left *Node
     Right *Node
 }
 
-func NewNode(data ct.Comparable) *Node {
+type BST struct {
+    Root *Node
+    Cmp ct.Comparator
+}
+
+func NewNode(data any) *Node {
     return &Node{
         data,
         nil,
@@ -20,8 +25,8 @@ func NewNode(data ct.Comparable) *Node {
     }
 }
 
-func (node *Node) Print() {
-    printRecurse([]*Node{node})
+func (bst *BST) Print() {
+    printRecurse([]*Node{bst.Root})
 }
 
 func printRecurse(nodes []*Node) {
@@ -46,33 +51,47 @@ func printRecurse(nodes []*Node) {
     printRecurse(newNodes)
 }
 
-func (node *Node) Insert(data ct.Comparable) {
-    if data.CompareTo(node.Data) < 0 {
+func (bst *BST) Insert(data any) {
+    bst.insertRec(bst.Root, data)
+}
+
+func (bst *BST) insertRec(node *Node, data any) {
+    if bst.Cmp(data, node.Data) < 0 {
         nextNode := node.Left
         if nextNode == nil {
             node.Left = NewNode(data)
         } else {
-            nextNode.Insert(data)
+            bst.insertRec(nextNode, data)
         }
     } else {
         nextNode := node.Right
         if nextNode == nil {
             node.Right = NewNode(data)
         } else {
-            nextNode.Insert(data)
+            bst.insertRec(nextNode, data)
         }
     }
 }
 
-func SortedArrToBalancedBST(arr []ct.Comparable) *Node {
+func SortedArrToBalancedBST(arr []any) *BST {
+    bst := &BST{
+        nil,
+        nil,
+    }
+
+    bst.Root = bst.fromSortedArrRec(arr)
+    return bst
+}
+
+func (bst *BST) fromSortedArrRec(arr []any) *Node {
     if len(arr) == 0 {
         return nil
     }
 
     iMid := len(arr) / 2
     root := NewNode(arr[iMid])
-    root.Left = SortedArrToBalancedBST(arr[:iMid])
-    root.Right = SortedArrToBalancedBST(arr[iMid+1:])
+    root.Left = bst.fromSortedArrRec(arr[:iMid])
+    root.Right = bst.fromSortedArrRec(arr[iMid+1:])
 
     return root
 }

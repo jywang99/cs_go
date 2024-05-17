@@ -3,7 +3,6 @@ package greedy
 import (
 	"strings"
 
-	ct "jy.org/csgo/src/custtypes"
 	"jy.org/csgo/src/sorting"
 )
 
@@ -17,12 +16,13 @@ type compStr struct {
     idx int
 }
 
-func (cs compStr) CompareTo(cb ct.Comparable) int {
+func cmpStr(cs, cb any) int {
+    c := cs.(compStr)
     ct := cb.(compStr)
-    hs := cs.data[0]
+    hs := c.data[0]
     ht := ct.data[0]
     if hs == ht {
-        hs := len(cs.data)
+        hs := len(c.data)
         ht := len(ct.data)
         return hs - ht
     }
@@ -33,7 +33,7 @@ func (cs compStr) CompareTo(cb ct.Comparable) int {
 }
 
 func NewSuffixArray(src string) *suffixArray {
-    subs := make([]ct.Comparable, len(src))
+    subs := make([]any, len(src))
     for i := range src {
         subs[i] = compStr{
             data: src[i:],
@@ -41,7 +41,7 @@ func NewSuffixArray(src string) *suffixArray {
         }
     }
     sort := sorting.QuickSorter{}
-    sort.Sort(&subs)
+    sort.Sort(&subs, cmpStr)
 
     sarr := &suffixArray{
         str: src, 

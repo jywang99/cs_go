@@ -9,23 +9,23 @@ import (
 )
 
 func TestHeap(t *testing.T) {
-    h := hp.NewMinHeap(5)
-    h.Insert(ct.CompInt{Data: 10})
-    h.Insert(ct.CompInt{Data: 7})
-    h.Insert(ct.CompInt{Data: 8})
-    h.Insert(ct.CompInt{Data: 4})
-    h.Insert(ct.CompInt{Data: 1})
+    h := hp.NewMinHeap(5, ct.IntComparator)
+    h.Insert(10)
+    h.Insert(7)
+    h.Insert(8)
+    h.Insert(4)
+    h.Insert(1)
 
-    err := h.Insert(&ct.CompInt{Data: 100})
+    err := h.Insert(100)
     assert.NotNil(t, err)
 
-    assert.Equal(t, 1, (*h.GetMin()).(ct.CompInt).Data)
-    assert.Equal(t, 1, (*h.ExtractMin()).(ct.CompInt).Data)
-    assert.Equal(t, 4, (*h.GetMin()).(ct.CompInt).Data)
-    assert.Equal(t, 4, (*h.ExtractMin()).(ct.CompInt).Data)
-    assert.Equal(t, 7,(*h.ExtractMin()).(ct.CompInt).Data) 
-    assert.Equal(t, 8, (*h.ExtractMin()).(ct.CompInt).Data)
-    assert.Equal(t, 10, (*h.ExtractMin()).(ct.CompInt).Data)
+    assert.Equal(t, 1, h.GetMin())
+    assert.Equal(t, 1, h.ExtractMin())
+    assert.Equal(t, 4, h.GetMin())
+    assert.Equal(t, 4, h.ExtractMin())
+    assert.Equal(t, 7, h.ExtractMin()) 
+    assert.Equal(t, 8, h.ExtractMin())
+    assert.Equal(t, 10, h.ExtractMin())
 
     assert.Nil(t, h.ExtractMin())
 }

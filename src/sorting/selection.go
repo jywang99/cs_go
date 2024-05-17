@@ -8,12 +8,12 @@ func (b *SelectionSorter) GetName() string {
     return "Selection Sort"
 }
 
-func (b *SelectionSorter) Sort(arr *[]ct.Comparable) {
+func (b *SelectionSorter) Sort(arr *[]any, cmp ct.Comparator) {
     a := *arr
     for i:=0; i<len(a); i++ {
         mi := i
         for j := i; j<len(a); j++ {
-            if a[j].CompareTo(a[mi]) < 0 {
+            if cmp(a[j],a[mi]) < 0 {
                 mi = j
             }
         }

@@ -8,7 +8,7 @@ func (b *InsertionSorter) GetName() string {
     return "Selection Sort"
 }
 
-func (b *InsertionSorter) Sort(arr *[]ct.Comparable) {
+func (b *InsertionSorter) Sort(arr *[]any, cmp ct.Comparator) {
     a := *arr
     if len(a) <= 1 {
         return
@@ -16,7 +16,7 @@ func (b *InsertionSorter) Sort(arr *[]ct.Comparable) {
     for i:=1; i<len(a); i++ {
         ival := a[i]
         j := i-1
-        for ; j>=0 && a[j].CompareTo(ival)>0; j-- {
+        for ; j>=0 && cmp(a[j], ival)>0; j-- {
             a[j+1] = a[j]
         }
         a[j+1] = ival

@@ -8,13 +8,13 @@ func (b *MergeSorter) GetName() string {
     return "Merge Sort"
 }
 
-func (b *MergeSorter) Sort(arr *[]ct.Comparable) {
+func (b *MergeSorter) Sort(arr *[]any, cmp ct.Comparator) {
     a := *arr
     if len(a) <= 1 {
         return
     }
     if len(a) == 2 {
-        if a[0].CompareTo(a[1]) > 0 {
+        if cmp(a[0], a[1]) > 0 {
             tmp := a[0]
             a[0] = a[1]
             a[1] = tmp
@@ -22,13 +22,13 @@ func (b *MergeSorter) Sort(arr *[]ct.Comparable) {
     }
 
     mi := len(a) / 2
-    larr := make([]ct.Comparable, mi)
-    rarr := make([]ct.Comparable, len(a) - mi)
+    larr := make([]any, mi)
+    rarr := make([]any, len(a) - mi)
     copy(larr, a[:mi])
     copy(rarr, a[mi:])
 
-    b.Sort(&larr)
-    b.Sort(&rarr)
+    b.Sort(&larr, cmp)
+    b.Sort(&rarr, cmp)
 
     ri := 0
     li := 0
@@ -46,7 +46,7 @@ func (b *MergeSorter) Sort(arr *[]ct.Comparable) {
 
         rv := rarr[ri]
         lv := larr[li]
-        if rv.CompareTo(lv) < 0 {
+        if cmp(rv, lv) < 0 {
             a[i] = rv
             ri ++
         } else {

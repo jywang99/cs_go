@@ -4,18 +4,10 @@ import (
 	"testing"
 
 	bst "jy.org/csgo/src/binarysearchtree"
-	ct "jy.org/csgo/src/custtypes"
 )
 
 func TestArrToBST(t *testing.T) {
-    arr := []ct.Comparable {
-        &ct.CompInt{Data: 1},
-        &ct.CompInt{Data: 2},
-        &ct.CompInt{Data: 3},
-        &ct.CompInt{Data: 4},
-        &ct.CompInt{Data: 5},
-        &ct.CompInt{Data: 6},
-    }
+    arr := []any { 1,2,3,4,5,6,7 }
     node := bst.SortedArrToBalancedBST(arr)
     node.Print()
 }

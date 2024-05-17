@@ -1,9 +1,9 @@
 package sorting
 
-import "jy.org/csgo/src/custtypes"
+import ct "jy.org/csgo/src/custtypes"
 
 type Sorter interface {
     GetName() string
-    Sort(arr *[]custtypes.Comparable)
+    Sort(arr *[]any, cmp ct.Comparator)
 }
 
