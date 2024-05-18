@@ -102,6 +102,24 @@ func getHashcodes(h *huffNode, path string, cmap *map[rune]string) {
 }
 
 func (ht *HuffmanTree) Decode(src string) string {
-    return ""
+    spos := 0
+    decoded := ""
+    for ; spos < len(src); {
+        n := ht.head
+        decoded += string(ht.decodeFirstChar(&src, n, &spos))
+    }
+    return decoded
+}
+
+func (ht *HuffmanTree) decodeFirstChar(src *string, n *huffNode, spos *int) rune {
+    if n.left == nil && n.right == nil {
+        return *n.ch
+    }
+    goleft := (*src)[*spos] == '0'
+    (*spos) ++
+    if goleft {
+        return ht.decodeFirstChar(src, n.left, spos)
+    }
+    return ht.decodeFirstChar(src, n.right, spos)
 }
 

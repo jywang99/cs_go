@@ -17,9 +17,15 @@ func TestSuffixArray(t *testing.T) {
 }
 
 func TestHuffman(t *testing.T) {
-    rs, ht, err := greedy.NewHuffmanEncode("AAAAAABBCCDDEEFFFFF")
+    plain := "AAAAAABBCCDDEEFFFFF"
+    encoded, ht, err := greedy.NewHuffmanEncode(plain)
     assert.Nil(t, err)
-    assert.Equal(t, 46, len(rs)) // since order of traversing a map is not guaranteed, specific codes can be different
+    assert.Equal(t, 46, len(encoded)) // since order of traversing a map is not guaranteed, specific codes can be different
     assert.NotNil(t, ht)
+    assert.Equal(t, plain, ht.Decode(encoded))
+
+    plain = "Hello World!"
+    encoded, ht, err = greedy.NewHuffmanEncode(plain)
+    assert.Equal(t, plain, ht.Decode(encoded))
 }
 
