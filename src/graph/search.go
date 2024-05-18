@@ -42,9 +42,9 @@ func (g *UGraph) getNeighbors(f int) []int {
     return rs
 }
 
-func (g *UGraph) DFS(s int) []int {
-    visited := make([]bool, g.vtcs)
-    rs := make([]int, g.vtcs)
+func (g *WGraph) DFS(s int) []int {
+    visited := make([]bool, g.size)
+    rs := make([]int, g.size)
     ri := 0
     nstack := stack.Stack{}
 
@@ -55,7 +55,10 @@ func (g *UGraph) DFS(s int) []int {
         rs[ri] = f
         ri ++
 
-        for _, i := range(g.getNeighbors(f)) {
+        for i, w := range g.adjMtx[f] {
+            if w == nil {
+                continue
+            }
             if !visited[i] && !nstack.Contains(i) {
                 nstack.Push(i)
             }
@@ -65,20 +68,23 @@ func (g *UGraph) DFS(s int) []int {
     return rs
 }
 
-func (g *UGraph) DFSRecurse(s int) []int {
-    visited := make([]bool, g.vtcs)
-    rs := make([]int, g.vtcs)
+func (g *WGraph) DFSRecurse(s int) []int {
+    visited := make([]bool, g.size)
+    rs := make([]int, g.size)
     ri := 0
     g.dfsRecurse(s, &visited, &rs, &ri)
     return rs
 }
 
-func (g *UGraph) dfsRecurse(f int, visited *[]bool, rs *[]int, ri *int) {
+func (g *WGraph) dfsRecurse(f int, visited *[]bool, rs *[]int, ri *int) {
     (*visited)[f] = true
     (*rs)[*ri] = f
     (*ri) ++
 
-    for _, i := range g.getNeighbors(f) {
+    for i, w := range g.adjMtx[f] {
+        if w == nil {
+            continue
+        }
         if !(*visited)[i] {
             g.dfsRecurse(i, visited, rs, ri)
         }

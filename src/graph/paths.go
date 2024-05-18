@@ -15,6 +15,8 @@ func (g *WGraph) BellmanFord(s int) ([]int, error) {
         g.bfRelax(&ds)
     }
 
+    // copy ds into rs
+    // ds is relaxed one additional time
     rs := make([]int, g.size)
     for i, p := range ds {
         rs[i] = *p
@@ -39,13 +41,13 @@ func (g *WGraph) bfRelax(dsp *[]*int) {
             continue
         }
         // update distance for each of its neighbors
-        for vt, p := range g.adjMtx[v] {
+        for vt, e := range g.adjMtx[v] {
             // not neighbor to vt
-            if p == nil || v == vt {
+            if e == nil || v == vt {
                 continue
             }
             // distance from start (s) to source (v) + edge weight
-            nd := *ds[v] + *p
+            nd := *ds[v] + (*e).GetWeight()
             // update if found the path first time or shorter than original distance
             if ds[vt] == nil || *ds[vt] > nd {
                 ds[vt] = &nd
@@ -63,7 +65,7 @@ func (g *WGraph) Dijkstra(s int) ([]*DijResult, error) {
     // make sure there's no negative edge
     for _, r := range g.adjMtx {
         for c, w := range r {
-            if w != nil && *w < 0 {
+            if w != nil && (*w).GetWeight() < 0 {
                 return nil, errors.New(fmt.Sprintf("Negative edge found! src=%v, dst=%v, w=%v", r, c, *w))
             }
         }
@@ -85,6 +87,7 @@ func (g *WGraph) Dijkstra(s int) ([]*DijResult, error) {
         return true
     }
 
+    // get closest vertex that is not visited and has known distance
     getClosestUnvisitedV := func() (int, error) {
         var cv *int
         var md *int
@@ -122,7 +125,7 @@ func (g *WGraph) Dijkstra(s int) ([]*DijResult, error) {
             if w == nil {
                 continue
             }
-            nd := (*ds[v]).Dist + *w
+            nd := (*ds[v]).Dist + (*w).GetWeight()
             if ds[vt] == nil || nd < (*ds[vt]).Dist {
                 ds[vt] = &DijResult{nd, &v}
             }

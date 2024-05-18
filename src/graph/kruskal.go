@@ -22,22 +22,12 @@ func (g* WGraph) Kruskal() (*WGraph, error) {
         return nil, errors.New("Directional graph not supported!")
     }
 
-    // earr := make([]*edgeNode, 0)
-    // for ri, row := range g.adjMtx {
-    //     for ci, w := range row {
-    //         earr = append(earr, &edgeNode{
-    //             vs: [2]int{ri, ci},
-    //             w: *w,
-    //         })
-    //     }
-    // }
-
     h := heap.NewMinHeap(len(g.adjMtx)*len(g.adjMtx[0]), cmpEdgeNode)
     g.traverseEdgesAndDo(
-        func(src, dst, w int) {
+        func(src, dst int, w *WEdge) {
             h.Insert(&edgeNode{
                 vs: [2]int{src, dst},
-                w: w,
+                w: (*w).GetWeight(),
             })
         },
     )
@@ -48,7 +38,7 @@ func (g* WGraph) Kruskal() (*WGraph, error) {
         s := en.vs[0]
         t := en.vs[1]
         if (!kg.HasPath(s, t)) {
-            kg.AddEdge(s, t, en.w)
+            kg.AddEdge(s, t, &IntWEdge{w: en.w})
         }
     }
 
@@ -60,7 +50,7 @@ func (g* WGraph) IsConnected() bool {
 
     visited[0] = true
     g.traverseEdgesAndDo(
-        func(src, dst, _ int) {
+        func(src, dst int, _ *WEdge) {
             if visited[src] {
                 visited[dst] = true
             }
@@ -75,11 +65,11 @@ func (g* WGraph) IsConnected() bool {
     return true
 }
 
-func (g* WGraph) traverseEdgesAndDo(f func(src, dst, w int)) {
+func (g* WGraph) traverseEdgesAndDo(f func(src, dst int, we *WEdge)) {
     for ri, row := range g.adjMtx {
         for ci, w := range row {
             if w != nil {
-                f(ri, ci, *w)
+                f(ri, ci, w)
             }
         }
     }

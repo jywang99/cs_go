@@ -58,12 +58,12 @@ func TestBfs(t *testing.T) {
 }
 
 func TestDfs(t *testing.T) {
-    g := gh.NewUGraphNoEdge(5)
-    g.AddEdge(0, 1)
-    g.AddEdge(0, 2)
-    g.AddEdge(0, 3)
-    g.AddEdge(2, 3)
-    g.AddEdge(2, 4)
+    g := gh.NewWGraph(5, false)
+    g.AddEdge(0, 1, gh.NewIntEdge(0))
+    g.AddEdge(0, 2, gh.NewIntEdge(0))
+    g.AddEdge(0, 3, gh.NewIntEdge(0))
+    g.AddEdge(2, 3, gh.NewIntEdge(0))
+    g.AddEdge(2, 4, gh.NewIntEdge(0))
 
     exps := [][]int {
         {0, 3, 2, 4, 1},
@@ -82,13 +82,13 @@ func TestCreateWeightedGraph(t *testing.T) {
     g := gh.NewWGraph(6, false)
     // g.PrintAdjMtx()
 
-    g.AddEdge(0, 1, 5)
-    g.AddEdge(1, 2, 1)
-    g.AddEdge(1, 3, 2)
-    g.AddEdge(2, 4, 1)
-    g.AddEdge(4, 3, -1)
-    g.AddEdge(3, 5, 2)
-    g.AddEdge(5, 4, -3)
+    g.AddEdge(0, 1, gh.NewIntEdge(5))
+    g.AddEdge(1, 2, gh.NewIntEdge(1))
+    g.AddEdge(1, 3, gh.NewIntEdge(2))
+    g.AddEdge(2, 4, gh.NewIntEdge(1))
+    g.AddEdge(4, 3, gh.NewIntEdge(-1))
+    g.AddEdge(3, 5, gh.NewIntEdge(2))
+    g.AddEdge(5, 4, gh.NewIntEdge(-3))
     // g.PrintAdjMtx()
 
     assert.True(t, g.HasEdge(0, 1))
@@ -99,33 +99,33 @@ func TestCreateWeightedGraph(t *testing.T) {
 func TestBellmanFord(t *testing.T) {
     g := gh.NewWGraph(6, true)
 
-    g.AddEdge(0, 1, 10)
-    g.AddEdge(0, 5, 8)
-    g.AddEdge(1, 3, 2)
-    g.AddEdge(2, 1, 1)
-    g.AddEdge(3, 2, -2)
-    g.AddEdge(4, 3, -1)
-    g.AddEdge(4, 1, -4)
-    g.AddEdge(5, 4, 1)
+    g.AddEdge(0, 1, gh.NewIntEdge(10))
+    g.AddEdge(0, 5, gh.NewIntEdge(8))
+    g.AddEdge(1, 3, gh.NewIntEdge(2))
+    g.AddEdge(2, 1, gh.NewIntEdge(1))
+    g.AddEdge(3, 2, gh.NewIntEdge(-2))
+    g.AddEdge(4, 3, gh.NewIntEdge(-1))
+    g.AddEdge(4, 1, gh.NewIntEdge(-4))
+    g.AddEdge(5, 4, gh.NewIntEdge(1))
 
     ds, err := g.BellmanFord(0)
     assert.Nil(t, err)
     assert.Equal(t, []int{0,5,5,7,9,8}, ds)
 
-    g.AddEdge(3, 4, 1) // create negative cycle
+    g.AddEdge(3, 4, gh.NewIntEdge(1)) // create negative cycle
     ds, err = g.BellmanFord(0)
     assert.NotNil(t, err)
 }
 
 func TestDijkstra(t *testing.T) {
     g := gh.NewWGraph(5, false)
-    g.AddEdge(0, 1, 6)
-    g.AddEdge(0, 3, 1)
-    g.AddEdge(1, 3, 2)
-    g.AddEdge(1, 4, 2)
-    g.AddEdge(1, 2, 5)
-    g.AddEdge(2, 4, 5)
-    g.AddEdge(4, 3, 1)
+    g.AddEdge(0, 1, gh.NewIntEdge(6))
+    g.AddEdge(0, 3, gh.NewIntEdge(1))
+    g.AddEdge(1, 3, gh.NewIntEdge(2))
+    g.AddEdge(1, 4, gh.NewIntEdge(2))
+    g.AddEdge(1, 2, gh.NewIntEdge(5))
+    g.AddEdge(2, 4, gh.NewIntEdge(5))
+    g.AddEdge(4, 3, gh.NewIntEdge(1))
 
     ds, err := g.Dijkstra(0)
     assert.Nil(t, err)
