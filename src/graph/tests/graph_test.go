@@ -90,6 +90,10 @@ func TestCreateWeightedGraph(t *testing.T) {
     g.AddEdge(3, 5, 2)
     g.AddEdge(5, 4, -3)
     // g.PrintAdjMtx()
+
+    assert.True(t, g.HasEdge(0, 1))
+    assert.True(t, g.HasEdge(1, 2))
+    assert.False(t, g.HasEdge(0, 5))
 }
 
 func TestBellmanFord(t *testing.T) {
@@ -143,4 +147,3 @@ func TestDijkstra(t *testing.T) {
     assert.Equal(t, 2, d.Dist)
     assert.Equal(t, 3, *d.Prev)
 }
-

@@ -43,7 +43,7 @@ func (g *WGraph) PrintAdjMtx() {
 }
 
 func (g *WGraph) AddEdge(s, t, w int) bool {
-    if !g.isValidEdge(s, t) {
+    if !g.isValidEdgeToCreate(s, t) {
         return false
     }
     g.adjMtx[s][t] = &w
@@ -53,9 +53,37 @@ func (g *WGraph) AddEdge(s, t, w int) bool {
     return true
 }
 
-func (g *WGraph) isValidEdge(s, t int) bool {
+func (g *WGraph) isValidEdgeToCreate(s, t int) bool {
     validVtx := func (v int) bool {
         return 0 <= v && v < g.size
     }
     return s != t && validVtx(s) && validVtx(t)
 }
+
+func (g *WGraph) HasEdge(s, t int) bool {
+    return g.adjMtx[s][t] != nil
+}
+
+func (g *WGraph) HasPath(s, t int) bool {
+    visited := make([]bool, g.size)
+    return g.hasPathRec(s, t, &visited)
+}
+
+func (g *WGraph) hasPathRec(n, t int, visited *[]bool) bool {
+    if n == t {
+        return true
+    }
+
+    (*visited)[n] = true
+    for nt, w := range g.adjMtx[n] {
+        if (*visited)[nt] || w == nil || nt == n {
+            continue
+        }
+        if g.hasPathRec(nt, t, visited) {
+            return true
+        }
+    }
+
+    return false
+}
+

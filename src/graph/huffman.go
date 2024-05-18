@@ -1,4 +1,4 @@
-package greedy
+package graph
 
 import (
 	"errors"
