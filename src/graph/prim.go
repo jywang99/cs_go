@@ -15,16 +15,8 @@ func (g *WGraph) Prim() (*WGraph, error) {
         return nil, errors.New("Graph must be connected!")
     }
 
-    visited := make([]bool, g.size)
-    visited[0] = true
-    allVisited := func() bool {
-        for _, v := range visited {
-            if !v {
-                return false
-            }
-        }
-        return true
-    }
+    visit, allVisited, visited := g.getVisitTracker()
+    visit(0)
 
     mst := NewWGraph(g.size, g.dir)
     for ; !allVisited(); {
@@ -33,14 +25,14 @@ func (g *WGraph) Prim() (*WGraph, error) {
         //   the newly visited vertex
         var medge *edgeInfo
         // for all visited vertices
-        for s, vis := range visited {
-            if !vis {
+        for s:=0; s<g.size; s++ {
+            if !visited(s) {
                 continue
             }
 
             // for all its unvisited outgoing edges
             g.DoForOutgoingEdges(s, func(t int, we *WEdge) {
-                if visited[t] {
+                if visited(t) {
                     return
                 }
 
@@ -66,7 +58,7 @@ func (g *WGraph) Prim() (*WGraph, error) {
         }
 
         // mark vertex visited
-        visited[medge.dst] = true
+        visit(medge.dst)
 
         // update MST
         mst.AddEdge(medge.src, medge.dst, *medge.edge)

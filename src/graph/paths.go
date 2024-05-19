@@ -71,21 +71,11 @@ func (g *WGraph) Dijkstra(s int) ([]*DijResult, error) {
         }
     }
 
-    // visited vertices
-    visited := make([]bool, g.size)
     // shortest distance found
     ds := make([]*DijResult, g.size)
     // initialize starting vertex
     ds[s] = &DijResult{ Dist: 0 }
-
-    allVisited := func() bool {
-        for _, v := range visited {
-            if !v {
-                return false
-            }
-        }
-        return true
-    }
+    visit, allVisited, visited := g.getVisitTracker()
 
     // get closest vertex that is not visited and has known distance
     getClosestUnvisitedV := func() (int, error) {
@@ -93,7 +83,7 @@ func (g *WGraph) Dijkstra(s int) ([]*DijResult, error) {
         var md *int
         for i, d := range ds {
             // already visited or distance unknown
-            if visited[i] || d == nil {
+            if visited(i) || d == nil {
                 continue
             }
             if md == nil || (*d).Dist < *md {
@@ -118,7 +108,7 @@ func (g *WGraph) Dijkstra(s int) ([]*DijResult, error) {
             return nil, err
         }
 
-        visited[v] = true
+        visit(v)
         // update distances for its unvisited neighbors
         for vt, w := range g.adjMtx[v] {
             // not neighbor

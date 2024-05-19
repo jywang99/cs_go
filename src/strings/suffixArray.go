@@ -55,12 +55,16 @@ func NewSuffixArray(src string) *suffixArray {
     return sarr
 }
 
-func (sa *suffixArray) FindFirstOccr(src string) int {
+func (sa *suffixArray) GetName() string {
+    return "Suffix Array"
+}
+
+func (sa *suffixArray) FindPattern(src string) []int {
     for _, s := range sa.sa {
         if strings.HasPrefix(sa.str[s:], src) {
-            return s
+            return []int{s}
         }
     }
-    return -1
+    return []int{}
 }
 

@@ -116,3 +116,26 @@ func (g *WGraph) DoForOutgoingEdges(s int, f func(int, *WEdge)) {
     }
 }
 
+func (g *WGraph) getVisitTracker() (func(int), func() bool, func(int) bool) {
+    visited := make([]bool, g.size)
+
+    visit := func(i int) {
+        visited[i] = true
+    }
+
+    allVisited := func() bool {
+        for _, v := range visited {
+            if !v {
+                return false
+            }
+        }
+        return true
+    }
+
+    vtxVisited := func(i int) bool {
+        return visited[i]
+    }
+
+    return visit, allVisited, vtxVisited
+}
+
