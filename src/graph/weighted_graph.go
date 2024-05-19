@@ -107,3 +107,12 @@ func (g *WGraph) hasPathRec(n, t int, visited *[]bool) bool {
     return false
 }
 
+func (g *WGraph) DoForOutgoingEdges(s int, f func(int, *WEdge)) {
+    for nn, e := range g.adjMtx[s] {
+        if e == nil {
+            continue
+        }
+        f(nn, e)
+    }
+}
+

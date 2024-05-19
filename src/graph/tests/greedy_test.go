@@ -129,3 +129,38 @@ func TestDfsAndDo(t *testing.T) {
     assert.Contains(t, paths, []int{0,1,3,5}, []int{0,2,4,1,3,5}, []int{0,2,4,5})
 }
 
+func TestPrim(t *testing.T) {
+    g := gh.NewWGraph(8, false)
+
+    g.AddEdge(0, 1, gh.NewIntEdge(4))
+    g.AddEdge(0, 3, gh.NewIntEdge(3))
+    g.AddEdge(1, 2, gh.NewIntEdge(3))
+    g.AddEdge(1, 3, gh.NewIntEdge(5))
+    g.AddEdge(1, 4, gh.NewIntEdge(6))
+    g.AddEdge(2, 4, gh.NewIntEdge(4))
+    g.AddEdge(2, 7, gh.NewIntEdge(2))
+    g.AddEdge(3, 4, gh.NewIntEdge(7))
+    g.AddEdge(3, 5, gh.NewIntEdge(4))
+    g.AddEdge(4, 5, gh.NewIntEdge(5))
+    g.AddEdge(4, 6, gh.NewIntEdge(3))
+    g.AddEdge(5, 6, gh.NewIntEdge(7))
+    g.AddEdge(6, 7, gh.NewIntEdge(5))
+
+    mst, err := g.Prim()
+
+    assert.Nil(t, err)
+    assert.True(t, mst.HasEdge(0, 1))
+    assert.True(t, mst.HasEdge(0, 3))
+    assert.True(t, mst.HasEdge(1, 2))
+    assert.False(t, mst.HasEdge(1, 3))
+    assert.False(t, mst.HasEdge(1, 4))
+    assert.True(t, mst.HasEdge(2, 4))
+    assert.True(t, mst.HasEdge(2, 7))
+    assert.False(t, mst.HasEdge(3, 4))
+    assert.True(t, mst.HasEdge(3, 5))
+    assert.False(t, mst.HasEdge(4, 5))
+    assert.True(t, mst.HasEdge(4, 6))
+    assert.False(t, mst.HasEdge(5, 6))
+    assert.False(t, mst.HasEdge(6, 7))
+}
+
