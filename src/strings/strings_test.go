@@ -23,14 +23,16 @@ func TestStringSearches(t *testing.T) {
     }
 
     // algorithms that find all occurrences
+    txt = "ABABDABACDABABCABAB"
     multiSearchers := []str.StirngSearch{
         str.NewBruteForceSearch(txt),
+        str.NewKnuthMorrisPratt(txt),
     }
     for _, s := range(multiSearchers) {
         t.Logf("String matcher: %v", s.GetName())
-        assert.Equal(t, []int{2,4}, s.FindPattern("na"))
-        assert.Equal(t, []int{1,3,5}, s.FindPattern("a"))
-        assert.Equal(t, []int{}, s.FindPattern("asdf"))
+        assert.Equal(t, []int{10}, s.FindPattern("ABABCABAB"))
+        assert.Equal(t, []int{0,10,15}, s.FindPattern("ABAB"))
+        assert.Equal(t, []int{}, s.FindPattern("CCC"))
     }
 }
 
