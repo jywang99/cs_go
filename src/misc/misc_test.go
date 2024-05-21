@@ -1,6 +1,7 @@
 package misc_test
 
 import (
+	"math/big"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,3 +15,15 @@ func TestBinarySearch(t *testing.T) {
     assert.Equal(t, 1, misc.BinarySearch([]int{0,10,20,30,40,50,60}, 10))
     assert.Equal(t, -1, misc.BinarySearch([]int{0,10,20,30,40,50,60}, 100))
 }
+
+func TestPrimeGen(t *testing.T) {
+    size := 1000
+    ps := misc.PrimeGen(size)
+    // check size
+    assert.Equal(t, size, len(ps))
+    // check if all prime
+    for _, n := range ps {
+        assert.True(t, big.NewInt(int64(n)).ProbablyPrime(0))
+    }
+}
+

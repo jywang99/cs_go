@@ -31,7 +31,7 @@ func (b *KnuthMorrisPratt) FindPattern(src string) []int {
             continue
         }
         // if r[i], r[j] mismatch,
-        // move j back continuously until it matches or becomes 0
+        // move j back (using indices in lps) continuously until it matches or becomes 0
         for ; ptn[j] != c && j > 0; {
             j = *lps[j]
         }
